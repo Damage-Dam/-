@@ -1,0 +1,21 @@
+{
+  "data": [
+    {
+      "region": "\u624b\u673a",
+      "sales": 419000.0
+    },
+    {
+      "region": "\u76f8\u673a",
+      "sales": 336000.0
+    },
+    {
+      "region": "\u7535\u8111",
+      "sales": 75000.0
+    },
+    {
+      "region": "\u5e73\u677f",
+      "sales": 476000.0
+    }
+  ],
+  "status": "success"
+}

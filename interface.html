@@ -1,1 +1,163 @@
-<!-- 请设计一个简洁美观的前端界面，包含一个顶部标题、两个图表容器和一个底部版权信息。 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+        .chart-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Sales Dashboard
+    </header>
+    <main>
+        <div class="chart-container">
+            <canvas id="salesTrendsChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="regionComparisonChart"></canvas>
+        </div>
+    </main>
+    <footer>
+        &copy; 2025 Damage-Dam. All rights reserved.
+    </footer>
+    <script>
+        // 异步获取response.json文件中的销售趋势数据
+        fetch('response.json')
+           .then(response => response.json())
+           .then(data => {
+                const salesTrendsData = {
+                    labels: data.data.map(item => item.date),
+                    datasets: [{
+                        label: 'Sales Trends',
+                        data: data.data.map(item => item.sales),
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                };
+
+                // 折线图：销售趋势
+                const salesTrendsChartCtx = document.getElementById('salesTrendsChart').getContext('2d');
+                new Chart(salesTrendsChartCtx, {
+                    type: 'line',
+                    data: salesTrendsData,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Sales Amount'
+                                },
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+
+        // 异步获取region.json文件中的地区销售对比数据
+        fetch('region.json')
+           .then(response => response.json())
+           .then(data => {
+                const regionComparisonData = {
+                    labels: data.data.map(item => item.region),
+                    datasets: [{
+                        label: 'Region Sales',
+                        data: data.data.map(item => item.sales),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+
+                // 柱状图：各地区销售对比
+                const regionComparisonChartCtx = document.getElementById('regionComparisonChart').getContext('2d');
+                new Chart(regionComparisonChartCtx, {
+                    type: 'bar',
+                    data: regionComparisonData,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Region'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Sales Amount'
+                                },
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+    </script>
+</body>
+</html>
